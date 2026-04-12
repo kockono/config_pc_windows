@@ -71,7 +71,7 @@ if ($isAdmin) {
 
     $chocoPackages = @(
         # Dev tools
-        "git", "ripgrep", "fd", "make", "curl",
+        "git", "ripgrep", "fd", "make", "curl", "wget",
         "corretto11jdk", "maven", "awscli",
         "putty.install", "autoruns", "dbeaver",
         "docker-desktop", "nvm",

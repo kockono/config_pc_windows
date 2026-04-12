@@ -47,6 +47,7 @@ pwsh -ExecutionPolicy Bypass -File dotfiles\install.ps1
 | `fd` | Alternativa moderna a `find` |
 | `make` | Build tool |
 | `curl` | HTTP client |
+| `wget` | Descargador de archivos via HTTP/FTP |
 | `corretto11jdk` | Java 11 LTS (Amazon Corretto) |
 | `maven` | Build tool para Java |
 | `awscli` | AWS Command Line Interface |
