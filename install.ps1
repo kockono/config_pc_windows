@@ -72,9 +72,9 @@ if ($isAdmin) {
     $chocoPackages = @(
         # Dev tools
         "git", "ripgrep", "fd", "make", "curl", "wget",
-        "corretto11jdk", "maven", "awscli",
-        "putty.install", "autoruns", "dbeaver",
-        "docker-desktop", "nvm",
+        "corretto11jdk", "maven", "awscli",  "golang", "python312",
+        "putty.install", "autoruns", "dbeaver", "docker-cli",
+        "docker-desktop", "nvm", "winget/cli", "terraform",
         # Editores / IDEs
         "vscode",
         # Browsers
@@ -82,10 +82,10 @@ if ($isAdmin) {
         # Comunicacion
         "discord", "thunderbird", "anydesk",
         # Multimedia
-        "vlc.install", "4k-youtube-to-mp3",
+        "vlc.install", "4k-youtube-to-mp3", "file-converter",
         # Productividad
         "obsidian", "powertoys", "googledrive",
-        "adobereader", "winrar", "7zip",
+        "adobereader", "winrar", "7zip", "office2019proplus"
         # Gaming
         "steam",
         # Automatizacion
