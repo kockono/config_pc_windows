@@ -13,7 +13,7 @@ $claudeMd    = "$env:USERPROFILE\.claude\CLAUDE.md"
 $isAdmin = ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
 
 Write-Host "`n=== DOTFILES INSTALL ===" -ForegroundColor Cyan
-Write-Host "  Pasos: 0=WSL2  1=Rust  2=Choco  3=WinGet  4=Bun  5=Claude Code  6=Scoop  7=Paquetes  8=RTK  9=Symlinks" -ForegroundColor DarkGray
+Write-Host "  Pasos: 0=WSL2  1=Rust  2=Choco  3=WinGet  4=Bun  5=Claude Code  6=Scoop  7=Paquetes  8=RTK  9=Symlinks  10=gentle-ai" -ForegroundColor DarkGray
 if (-not $isAdmin) {
     Write-Host "  AVISO: No sos admin. WSL2, Chocolatey y RTK hook seran omitidos." -ForegroundColor DarkYellow
 }
@@ -319,6 +319,20 @@ New-Item -ItemType SymbolicLink -Path $gitconfigTarget -Target "$dotfiles\git\.g
 Write-Host "  Symlink .gitconfig OK" -ForegroundColor Green
 
 # -------------------------------------------------------------
+# 9. gentle-ai (via Scoop)
+# -------------------------------------------------------------
+Write-Host "`n[9/9] Verificando gentle-ai..." -ForegroundColor Yellow
+
+if (-not (Get-Command gentle-ai -ErrorAction SilentlyContinue)) {
+    Write-Host "  Instalando gentle-ai via Scoop..." -ForegroundColor Gray
+    scoop bucket add gentleman https://github.com/Gentleman-Programming/scoop-bucket 2>$null
+    scoop install gentle-ai 2>$null
+    Write-Host "  gentle-ai instalado OK." -ForegroundColor Green
+} else {
+    Write-Host "  gentle-ai ya instalado: $((Get-Command gentle-ai).Source)" -ForegroundColor Green
+}
+
+# -------------------------------------------------------------
 # Listo
 # -------------------------------------------------------------
 Write-Host "`n=== INSTALACION COMPLETA ===" -ForegroundColor Cyan
@@ -329,3 +343,4 @@ Write-Host "  3. Ejecuta :checkhealth en Neovim para verificar todo" -Foreground
 Write-Host "  4. Instala RTK: cargo install rtk  (luego reinicia la terminal)" -ForegroundColor Gray
 Write-Host "  5. Abre OpenCode con: opencode" -ForegroundColor Gray
 Write-Host "  6. Conecta tu provider en OpenCode con: /connect" -ForegroundColor Gray
+Write-Host "  7. Configura gentle-ai con: gentle-ai" -ForegroundColor Gray
