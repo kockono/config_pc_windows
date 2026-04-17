@@ -13,7 +13,7 @@ $claudeMd    = "$env:USERPROFILE\.claude\CLAUDE.md"
 $isAdmin = ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
 
 Write-Host "`n=== DOTFILES INSTALL ===" -ForegroundColor Cyan
-Write-Host "  Pasos: 0=WSL2  1=Rust  2=Choco  3=WinGet  4=Bun  5=Claude Code  6=Scoop  7=Paquetes  8=RTK  9=Symlinks  10=gentle-ai" -ForegroundColor DarkGray
+Write-Host "  Pasos: 0=WSL2  1=Rust  2=Choco  2b=Node  3=WinGet  4=Bun  5=Claude Code  6=Scoop  7=Paquetes  8=RTK  9=Symlinks  10=gentle-ai" -ForegroundColor DarkGray
 if (-not $isAdmin) {
     Write-Host "  AVISO: No sos admin. WSL2, Chocolatey y RTK hook seran omitidos." -ForegroundColor DarkYellow
 }
@@ -100,6 +100,27 @@ if ($isAdmin) {
     }
 } else {
     Write-Host "  OMITIDO (requiere admin)." -ForegroundColor DarkYellow
+}
+
+# -------------------------------------------------------------
+# 2b. Node 20 via nvm
+# -------------------------------------------------------------
+Write-Host "`n[2b] Configurando Node 20 via nvm..." -ForegroundColor Yellow
+
+if (Get-Command nvm -ErrorAction SilentlyContinue) {
+    nvm install 20 2>$null
+    nvm use 20 2>$null
+    $env:PATH += ";$env:APPDATA\nvm"
+    Write-Host "  Node 20 activo." -ForegroundColor Green
+
+    # Ejecutar install-npm.ps1 si existe
+    $npmScript = Join-Path $PSScriptRoot "install-npm.ps1"
+    if (Test-Path $npmScript) {
+        Write-Host "  Ejecutando install-npm.ps1..." -ForegroundColor Gray
+        & $npmScript
+    }
+} else {
+    Write-Host "  OMITIDO: nvm no encontrado (requiere admin + reinicio)." -ForegroundColor DarkYellow
 }
 
 # -------------------------------------------------------------
