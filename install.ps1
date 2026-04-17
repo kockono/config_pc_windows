@@ -145,6 +145,67 @@ if (-not (Get-Command claude -ErrorAction SilentlyContinue)) {
 }
 
 # -------------------------------------------------------------
+# 4b. bin/ — opc.ps1 (switch de cuentas OpenCode)
+# -------------------------------------------------------------
+Write-Host "`n[4b/8] Configurando bin/opc.ps1..." -ForegroundColor Yellow
+
+$binDir      = "$env:USERPROFILE\bin"
+$opcScript   = "$binDir\opc.ps1"
+$aliasSource = "$dotfiles\powershell\opencode-aliases.ps1"
+$authDir     = "$HOME\.local\share\opencode"
+
+# Crear carpeta bin si no existe
+if (-not (Test-Path $binDir)) {
+    New-Item -ItemType Directory -Force -Path $binDir | Out-Null
+    Write-Host "  Carpeta bin creada: $binDir" -ForegroundColor Gray
+}
+
+# Escribir opc.ps1
+$opcContent = @"
+`$dotfilesRoot = if (`$env:OPENCODE_DOTFILES) { `$env:OPENCODE_DOTFILES } else { '$($dotfiles -replace '\\','\\')' }
+`$scriptPath   = '$($dotfiles -replace '\\','\\')\powershell\opencode-aliases.ps1'
+
+if (-not (Test-Path `$scriptPath)) {
+  Write-Host "No se encontro: `$scriptPath" -ForegroundColor Red
+  exit 1
+}
+
+. `$scriptPath
+opc @args
+"@
+[System.IO.File]::WriteAllText($opcScript, $opcContent, [System.Text.UTF8Encoding]::new($false))
+Write-Host "  opc.ps1 escrito en: $opcScript" -ForegroundColor Gray
+
+# Crear auth-primary.json si no existe (placeholder vacío)
+New-Item -ItemType Directory -Force -Path $authDir | Out-Null
+if (-not (Test-Path "$authDir\auth-primary.json")) {
+    [System.IO.File]::WriteAllText("$authDir\auth-primary.json", "{}", [System.Text.UTF8Encoding]::new($false))
+    Write-Host "  auth-primary.json creado (placeholder). Reemplazalo con tu sesion real." -ForegroundColor DarkYellow
+} else {
+    Write-Host "  auth-primary.json ya existe." -ForegroundColor Green
+}
+
+# Crear auth-secondary.json si no existe (placeholder vacío)
+if (-not (Test-Path "$authDir\auth-secondary.json")) {
+    [System.IO.File]::WriteAllText("$authDir\auth-secondary.json", "{}", [System.Text.UTF8Encoding]::new($false))
+    Write-Host "  auth-secondary.json creado (placeholder). Reemplazalo con tu sesion real." -ForegroundColor DarkYellow
+} else {
+    Write-Host "  auth-secondary.json ya existe." -ForegroundColor Green
+}
+
+# Agregar bin/ al PATH del usuario si no está
+$userPath = [Environment]::GetEnvironmentVariable("PATH", "User")
+if ($userPath -notlike "*$binDir*") {
+    [Environment]::SetEnvironmentVariable("PATH", "$userPath;$binDir", "User")
+    $env:PATH += ";$binDir"
+    Write-Host "  $binDir agregado al PATH del usuario." -ForegroundColor Green
+} else {
+    Write-Host "  $binDir ya esta en el PATH." -ForegroundColor Green
+}
+
+Write-Host "  bin/opc.ps1 listo. Usa: opc 1 | opc 2 | opc --save=1 | opc --save=2" -ForegroundColor Green
+
+# -------------------------------------------------------------
 # 4. Scoop
 # -------------------------------------------------------------
 Write-Host "`n[5/8] Verificando Scoop..." -ForegroundColor Yellow
@@ -177,6 +238,8 @@ $scoopPackages = @(
     "main/jq",
     "main/mkcert",
     "main/fzf",
+    # Go tools
+    "main/air",
     # Python
     "main/uv",
     "main/pipx",
@@ -343,4 +406,7 @@ Write-Host "  3. Ejecuta :checkhealth en Neovim para verificar todo" -Foreground
 Write-Host "  4. Instala RTK: cargo install rtk  (luego reinicia la terminal)" -ForegroundColor Gray
 Write-Host "  5. Abre OpenCode con: opencode" -ForegroundColor Gray
 Write-Host "  6. Conecta tu provider en OpenCode con: /connect" -ForegroundColor Gray
+Write-Host "  6b. Guarda tu sesion principal con: opc --save=1" -ForegroundColor Gray
+Write-Host "  6c. Guarda tu sesion secundaria con: opc --save=2" -ForegroundColor Gray
+Write-Host "  6d. Para cambiar de cuenta: opc 1 | opc 2" -ForegroundColor Gray
 Write-Host "  7. Configura gentle-ai con: gentle-ai" -ForegroundColor Gray

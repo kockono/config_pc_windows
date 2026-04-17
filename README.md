@@ -133,6 +133,11 @@ pwsh -ExecutionPolicy Bypass -File dotfiles\install.ps1
 | `mkcert` | Certificados SSL locales |
 | `fzf` | Fuzzy finder para terminal |
 
+#### Go Tools
+| Paquete | Descripción |
+|---------|-------------|
+| `air` | Live reload para apps Go — recarga automática al guardar `.go` |
+
 #### Python
 | Paquete | Descripción |
 |---------|-------------|
@@ -188,6 +193,29 @@ Configura el hook `PreToolUse` para Claude Code en Windows usando PowerShell 7 (
 
 ---
 
+## OpenCode multi-cuenta (Anthropic principal/secundaria)
+
+Este repo incluye un setup para cambiar rápido entre 2 cuentas de OpenCode/Anthropic sin desloguearse manualmente.
+
+- Config runtime: `~/.local/share/opencode/auth*.json`
+- Scripts versionados: [`opencode/`](opencode/)
+- Launcher global: `opc`
+
+Uso:
+
+```powershell
+opc 1          # usar cuenta principal
+opc 2          # usar cuenta secundaria
+opc --save=1   # guardar sesión actual como principal
+opc --save=2   # guardar sesión actual como secundaria
+```
+
+Instructivo completo:
+
+- [`opencode/INSTRUCTIVO.md`](opencode/INSTRUCTIVO.md)
+
+---
+
 ## Post-instalación
 
 ```powershell
@@ -228,6 +256,13 @@ dotfiles/
 │       └── kickstart/
 │           └── plugins/
 │               └── neo-tree.lua
+├── opencode/
+│   ├── INSTRUCTIVO.md                ← guía para recuperar setup multi-cuenta
+│   ├── oc-primary.ps1                ← activa cuenta principal
+│   ├── oc-secondary.ps1              ← activa cuenta secundaria
+│   └── oc-save-secondary.ps1         ← guarda sesión actual como secundaria
+├── powershell/
+│   └── opencode-aliases.ps1          ← función global `opc`
 └── refs/
     └── rtk-windows-hook.md           ← workaround RTK en Windows
 ```
