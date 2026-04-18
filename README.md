@@ -25,6 +25,7 @@ pwsh -ExecutionPolicy Bypass -File dotfiles\install.ps1
 | `[0/9]` | WSL2 + Ubuntu | ✅ |
 | `[1/9]` | Rust + Cargo (via rustup) | ❌ |
 | `[2/9]` | Chocolatey + paquetes | ✅ |
+| `[2b]`  | Node 20 via nvm + paquetes npm | ❌ |
 | `[3/9]` | WinGet — PowerShell | ❌ |
 | `[4/9]` | Bun (binario nativo) | ❌ |
 | `[5/9]` | Claude Code (binario nativo) | ❌ |
@@ -32,6 +33,7 @@ pwsh -ExecutionPolicy Bypass -File dotfiles\install.ps1
 | `[7/9]` | Paquetes Scoop | ❌ |
 | `[8/9]` | RTK hook para Claude Code | ✅ |
 | `[9/9]` | Symlinks (nvim + .gitconfig) | ❌ |
+| `[9/9]` | gentle-ai | ❌ |
 
 ---
 
@@ -171,6 +173,29 @@ pwsh -ExecutionPolicy Bypass -File dotfiles\install.ps1
 | **Bun** | Script oficial `bun.sh/install.ps1` | Runtime JS/TS ultra rápido, reemplaza Node en muchos casos |
 | **Claude Code** | Script oficial `claude.ai/install.ps1` | AI coding agent de Anthropic |
 | **WSL2 + Ubuntu** | `wsl --install` | Windows Subsystem for Linux |
+| **gentle-ai** | Scoop / `go install` / PowerShell script | Configura el ecosistema Gentleman AI en cualquier agente |
+
+---
+
+### gentle-ai
+
+Configura el ecosistema Gentleman AI (skills, memoria persistente, SDD workflow) en cualquier agente (Claude Code, OpenCode, Gemini CLI, Cursor, etc.).
+
+#### Instalación en Windows
+
+```powershell
+# Opción 1 — Scoop (recomendado, ya incluido en install.ps1)
+scoop bucket add gentleman https://github.com/Gentleman-Programming/scoop-bucket
+scoop install gentle-ai
+
+# Opción 2 — go install (requiere Go 1.24+, ya instalado via Chocolatey)
+go install github.com/gentleman-programming/gentle-ai/cmd/gentle-ai@latest
+
+# Opción 3 — PowerShell script (descarga binario precompilado)
+irm https://raw.githubusercontent.com/Gentleman-Programming/gentle-ai/main/scripts/install.ps1 | iex
+```
+
+> Repo: [github.com/Gentleman-Programming/gentle-ai](https://github.com/Gentleman-Programming/gentle-ai)
 
 ---
 
@@ -236,6 +261,9 @@ cargo install rtk
 opencode
 # dentro de opencode:
 /connect
+
+# 6. Configurar gentle-ai
+gentle-ai
 ```
 
 ---
@@ -245,6 +273,7 @@ opencode
 ```
 dotfiles/
 ├── install.ps1                       ← script maestro
+├── install-npm.ps1                   ← paquetes globales npm
 ├── README.md                         ← este archivo
 ├── git/
 │   └── .gitconfig
