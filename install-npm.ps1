@@ -13,7 +13,12 @@ if (-not (Get-Command npm -ErrorAction SilentlyContinue)) {
 
 $npmPackages = @(
     # AI agents
-    "@openai/codex"
+    "@google/gemini-cli",
+    "@openai/codex",
+    "opencode-ai@1.4.7",
+    # Dev tools
+    "@angular/cli",
+    "@capacitor/assets"
 )
 
 foreach ($pkg in $npmPackages) {
