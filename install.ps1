@@ -12,6 +12,9 @@ $claudeMd    = "$env:USERPROFILE\.claude\CLAUDE.md"
 
 $isAdmin = ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
 
+$ErrorActionPreference = "Stop"
+$ProgressPreference    = "SilentlyContinue"
+
 Write-Host "`n=== DOTFILES INSTALL ===" -ForegroundColor Cyan
 Write-Host "  Pasos: 0=WSL2  1=Rust  2=Choco  2b=Node  3=WinGet  4=Bun  5=Claude Code  6=Scoop  7=Paquetes  8=RTK  9=Symlinks  10=gentle-ai" -ForegroundColor DarkGray
 if (-not $isAdmin) {
@@ -95,8 +98,12 @@ if ($isAdmin) {
     )
     Write-Host "  Instalando paquetes Chocolatey..." -ForegroundColor Gray
     foreach ($pkg in $chocoPackages) {
-        choco install $pkg -y --no-progress 2>$null
-        Write-Host "    $pkg OK" -ForegroundColor Gray
+        try {
+            choco install $pkg -y --no-progress 2>$null
+            Write-Host "    $pkg OK" -ForegroundColor Gray
+        } catch {
+            Write-Host "    $pkg WARN: $_" -ForegroundColor DarkYellow
+        }
     }
 } else {
     Write-Host "  OMITIDO (requiere admin)." -ForegroundColor DarkYellow
@@ -108,8 +115,8 @@ if ($isAdmin) {
 Write-Host "`n[2b] Configurando Node 20 via nvm..." -ForegroundColor Yellow
 
 if (Get-Command nvm -ErrorAction SilentlyContinue) {
-    nvm install 20 2>$null
-    nvm use 20 2>$null
+    try { nvm install 20 2>$null } catch {}
+    try { nvm use 20 2>$null } catch {}
     $env:PATH += ";$env:APPDATA\nvm"
     Write-Host "  Node 20 activo." -ForegroundColor Green
 
@@ -130,7 +137,7 @@ Write-Host "`n[2/8] Instalando paquetes WinGet..." -ForegroundColor Yellow
 
 if (Get-Command winget -ErrorAction SilentlyContinue) {
     Write-Host "  Actualizando PowerShell..." -ForegroundColor Gray
-    winget install --id Microsoft.PowerShell -e --source winget --accept-package-agreements --accept-source-agreements 2>$null
+    try { winget install --id Microsoft.PowerShell -e --source winget --accept-package-agreements --accept-source-agreements 2>$null } catch {}
     Write-Host "  PowerShell OK" -ForegroundColor Green
 } else {
     Write-Host "  OMITIDO: winget no disponible en este sistema." -ForegroundColor DarkYellow
@@ -246,7 +253,7 @@ Write-Host "`n[6/8] Instalando paquetes Scoop..." -ForegroundColor Yellow
 
 $buckets = @("main", "extras", "nerd-fonts")
 foreach ($bucket in $buckets) {
-    scoop bucket add $bucket 2>$null
+    try { scoop bucket add $bucket 2>$null } catch {}
 }
 
 $scoopPackages = @(
@@ -277,7 +284,7 @@ $scoopPackages = @(
 foreach ($pkg in $scoopPackages) {
     $name = $pkg.Split("/")[-1]
     Write-Host "  Instalando $name..." -ForegroundColor Gray
-    scoop install $pkg 2>$null
+    try { scoop install $pkg 2>$null } catch {}
 }
 
 Write-Host "  Paquetes Scoop OK." -ForegroundColor Green
@@ -410,8 +417,8 @@ Write-Host "`n[9/9] Verificando gentle-ai..." -ForegroundColor Yellow
 if (-not (Get-Command gentle-ai -ErrorAction SilentlyContinue)) {
     if (Get-Command scoop -ErrorAction SilentlyContinue) {
         Write-Host "  Instalando gentle-ai via Scoop..." -ForegroundColor Gray
-        scoop bucket add gentleman https://github.com/Gentleman-Programming/scoop-bucket 2>$null
-        scoop install gentle-ai 2>$null
+        try { scoop bucket add gentleman https://github.com/Gentleman-Programming/scoop-bucket 2>$null } catch {}
+        scoop install gentle-ai
     } elseif (Get-Command go -ErrorAction SilentlyContinue) {
         Write-Host "  Instalando gentle-ai via go install..." -ForegroundColor Gray
         go install github.com/gentleman-programming/gentle-ai/cmd/gentle-ai@latest
