@@ -17,7 +17,12 @@ $claudeMd    = "$env:USERPROFILE\.claude\CLAUDE.md"
 $isAdmin = ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
 
 Write-Host "`n=== DOTFILES INSTALL ===" -ForegroundColor Cyan
-Write-Host "  Pasos: 00-wsl  01-rust  02-choco  03-node  04-winget  05-bun  06-claude  07-opencode-accounts  08-scoop  09-rtk  10-symlinks  11-gentle-ai" -ForegroundColor DarkGray
+Write-Host "  Pasos:" -ForegroundColor DarkGray
+Write-Host "    00-wsl              01-rust             02-chocolatey" -ForegroundColor DarkGray
+Write-Host "    03-node             03b-npm             04-winget" -ForegroundColor DarkGray
+Write-Host "    05-bun              06-claude           07-opencode-accounts" -ForegroundColor DarkGray
+Write-Host "    08-scoop            09-rtk              10-symlinks" -ForegroundColor DarkGray
+Write-Host "    11-gentle-ai" -ForegroundColor DarkGray
 if (-not $isAdmin) {
     Write-Host "  AVISO: No sos admin. WSL2, Chocolatey y RTK hook seran omitidos." -ForegroundColor DarkYellow
 }
