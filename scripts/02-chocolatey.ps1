@@ -17,7 +17,7 @@ if ($isAdmin) {
         "ripgrep", "fd", "make", "curl", "wget",
         "corretto11jdk", "maven", "awscli", "golang", "python312",
         "putty.install", "autoruns", "dbeaver", "docker-cli",
-        "docker-desktop", "nvm", "winget/cli", "terraform",
+        "docker-desktop", "nvm", "winget/cli", "terraform", 
         # Editores / IDEs
         "vscode",
         # Browsers
@@ -30,7 +30,7 @@ if ($isAdmin) {
         "obsidian", "powertoys", "googledrive",
         "adobereader", "winrar", "7zip", "office2019proplus",
         # Gaming
-        "steam",
+        "steam", "logitechgaming",
         # Automatizacion
         "autohotkey",
         # Seguridad / Hacking
