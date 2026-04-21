@@ -30,7 +30,7 @@ if ($isAdmin) {
         "obsidian", "powertoys", "googledrive",
         "adobereader", "winrar", "7zip", "office2019proplus",
         # Gaming
-        "steam", "logitechgaming",
+        "steam", "logitechgaming","gh",
         # Automatizacion
         "autohotkey",
         # Seguridad / Hacking
