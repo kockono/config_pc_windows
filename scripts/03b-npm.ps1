@@ -10,10 +10,11 @@ $npmPackages = @(
     # AI agents
     "@google/gemini-cli",
     "@openai/codex",
-    "opencode-ai@1.4.7",
+    "@opencode-ai@1.4.7",
     # Dev tools
     "@angular/cli",
-    "@capacitor/assets"
+    "@capacitor/assets",
+    "@openclaw@latest"
 )
 
 foreach ($pkg in $npmPackages) {
